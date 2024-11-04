@@ -15,7 +15,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.appcompat.widget.Toolbar
 
-class MainActivity : AppCompatActivity(), Removable {
+class MainActivity : AppCompatActivity()/*, Removable*/ {
+
 
     private var adapter: ArrayAdapter<User>? = null
     val users: MutableList<User> = mutableListOf()
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity(), Removable {
     private lateinit var ageET: EditText
     private lateinit var saveBTN: Button
     private lateinit var listUsersLV: ListView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +55,8 @@ class MainActivity : AppCompatActivity(), Removable {
             if (nameET.text.isEmpty() ||
                 ageET.text.isEmpty() ||
                 ageET.text.toString().toInt() < 0 ||
-                ageET.text.toString().toInt() > 200) {
+                ageET.text.toString().toInt() > 200
+            ) {
                 Toast.makeText(this, "Данные введены некорректно!", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
@@ -64,17 +67,8 @@ class MainActivity : AppCompatActivity(), Removable {
         }
 
         listUsersLV.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, position, id ->
-                val user = adapter!!.getItem(position)
-                val dialog = MyDialog()
-                val args = Bundle()
-                args.putString("user", user)
-                dialog.arguments = args
-                dialog.show(supportFragmentManager, "custom")
-            }
+            MyDialog.createDialog(this, adapter!!)
     }
-
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -94,9 +88,4 @@ class MainActivity : AppCompatActivity(), Removable {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    override fun remove(user: String?) {
-        adapter?.remove(user)
-    }
-
 }

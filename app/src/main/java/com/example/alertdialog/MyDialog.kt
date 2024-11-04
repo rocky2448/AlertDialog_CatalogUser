@@ -1,30 +1,31 @@
 package com.example.alertdialog
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
-import android.os.Bundle
-import androidx.fragment.app.DialogFragment
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 
-class MyDialog : DialogFragment() {
-    private var removable: Removable? = null
+class MyDialog {
+    companion object {
+        fun createDialog(context: Context, adapter: ArrayAdapter<User>) =
+            AdapterView.OnItemClickListener { parent, v, position, id ->
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle("Внимание")
+                    .setIcon(R.drawable.ic_delete)
+                    .setMessage("Удалить пользователя?")
+                    .setCancelable(true)
+                    .setNegativeButton("Отмена") { dialog, which ->
+                        dialog.cancel()
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        removable = context as Removable?
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val user = requireArguments().getString("user")
-        val builder = AlertDialog.Builder(requireActivity())
-        return builder
-            .setTitle("Внимание")
-            .setIcon(R.drawable.ic_delete)
-            .setMessage("Удалить пользователя $user")
-            .setPositiveButton("Да") { dialog, which ->
-                removable?.remove(user)
+                    }
+                    .setPositiveButton("Да") { dialog, which ->
+                        val user = adapter.getItem(position)
+                        adapter.remove(user)
+                        Toast.makeText(context, "Пользователь $user удалён!", Toast.LENGTH_LONG)
+                            .show()
+                    }.create()
+                builder.show()
             }
-            .setNegativeButton("Отмена", null)
-            .create()
     }
 }
