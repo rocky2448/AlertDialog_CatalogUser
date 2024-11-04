@@ -3,7 +3,6 @@ package com.example.alertdialog
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -15,7 +14,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.appcompat.widget.Toolbar
 
-class MainActivity : AppCompatActivity()/*, Removable*/ {
+class MainActivity : AppCompatActivity() {
 
 
     private var adapter: ArrayAdapter<User>? = null
